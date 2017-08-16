@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flix Added</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Result</h1>
+<p th:text="'Name: ' + ${flix.name}" />
+<p th:text="'Description: ' + ${flix.description}" />
+<p th:text="'Genre: ' + ${flix.genre}" />
+<p th:text="'Average Rating: ' + ${flix.avgRating}" />
+<a href="/flix/add">Submit another message</a>
+</body>
+</html>

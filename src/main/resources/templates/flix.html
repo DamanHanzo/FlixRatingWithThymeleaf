@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flix</title>
+    <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
+        .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
+        .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+        .tg .tg-4eph{background-color:#f9f9f9}
+    </style>
+</head>
+<body>
+<a th:href="@{/flix}">Add a Flix</a>
+<form action="#" th:action="@{/flix/search/__${name}__}" method="post">
+    <p>Search: <input type="text" id="name"  name="name"/></p>
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+<div class="flixList">
+    <h2>List of flix</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Genre</th>
+            <th>Average Rating</th>
+            <th>Edit Flix</th>
+            <th>Remove Flix</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="fl: ${listFlix}">
+            <td th:text="${{fl.name}}"></td>
+            <td th:text="${{fl.description}}"></td>
+            <td th:text="${{fl.genre}}"></td>
+            <td th:text="${{fl.avgRating}}"></td>
+            <td><a th:href="@{/flix/update/} + ${fl.id}">Edit</a> </td>
+            <td><a th:href="@{/flix/remove/}+${fl.id}">Remove</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+
+</body>
+</html>

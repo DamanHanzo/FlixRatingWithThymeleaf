@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Flix</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Form</h1>
+<form action="#" th:action="@{/flix/}+${id}" th:object="${flix}" method="post">
+    <p>Name: <input type="text" th:field="*{name}" /></p>
+    <p>Description <input type="text" th:field="*{description}" /></p>
+    <p>Genre<input type="text" th:field="*{genre}" /></p>
+    <p>Average Rating <input type="text" th:field="*{avgRating}" /></p>
+    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
+</form>
+</body>
+</html>
