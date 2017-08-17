@@ -6,6 +6,8 @@ import com.kla.FlixRating.repository.CommentRepository;
 import com.kla.FlixRating.repository.FlixRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -28,7 +30,7 @@ public class FlixServiceImpl implements FlixService {
     @Override
     @Transactional
     public void addFlix(Flix f){
-        this.flixRepository.saveAndFlush(f);
+        this.flixRepository.save(f);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class FlixServiceImpl implements FlixService {
     @Transactional
     public List<Flix> listFlix(){
         List<Flix> flixList = new ArrayList<Flix>();
-        flixList = this.flixRepository.findAll();
+        flixList = (List<Flix>)this.flixRepository.findAll();
         for(Flix flix: flixList){
             List<Comment> comments = new ArrayList<Comment>();
             comments = this.commentRepository.getCommentByFlix_Id(flix.getId());
@@ -54,7 +56,7 @@ public class FlixServiceImpl implements FlixService {
     @Override
     @Transactional
     public Flix getFlixById(Long id){
-        return this.flixRepository.getOne(id);
+        return this.flixRepository.getById(id);
     }
 
     @Override
@@ -67,13 +69,18 @@ public class FlixServiceImpl implements FlixService {
     @Override
     @Transactional
     public List<Flix> findByName(String name){
-        List<Flix> flixList = this.flixRepository.findByNameContaining(name);
-        return flixList;
+        return this.flixRepository.findByNameContaining(name);
     }
 
     @Override
     @Transactional
     public void updateFlix(Flix f){
-        this.flixRepository.saveAndFlush(f);
+        this.flixRepository.save(f);
+    }
+
+    @Override
+    @Transactional
+    public Page<Flix> listAllByPages(Pageable pageable){
+        return this.flixRepository.findAll(pageable);
     }
 }

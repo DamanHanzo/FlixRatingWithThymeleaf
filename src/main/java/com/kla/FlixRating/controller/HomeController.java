@@ -1,16 +1,20 @@
 package com.kla.FlixRating.controller;
 
 import com.kla.FlixRating.model.Flix;
+import com.kla.FlixRating.model.PageWrapper;
 import com.kla.FlixRating.repository.CommentRepository;
 import com.kla.FlixRating.service.FlixService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 import java.util.List;
 
 @Controller
@@ -46,8 +50,11 @@ public class HomeController {
     }
 
     @RequestMapping(value="/flixs", method= RequestMethod.GET)
-    public String listFlix(Model model){
-        model.addAttribute("listFlix",this.flixService.listFlix());
+    public String listFlix(Model model, Pageable pageable){
+        Page<Flix> flixes = this.flixService.listAllByPages(pageable);
+        PageWrapper<Flix> page = new PageWrapper<Flix>(flixes, "/flixs");
+        model.addAttribute("page", page);
+        model.addAttribute("listFlix",page.getContent());
         return "flix";
     }
 
