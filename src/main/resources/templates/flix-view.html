@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Flix</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+<h1>Form</h1>
+<form th:action="@{/flix/}+${id}" th:object="${flix}" method="get" class="container-fluid">
+    <p>Name: <input type="text" th:field="*{name}" th:readonly="*{name}"/></p>
+    <p>Description <input type="text" th:field="*{description}" th:readonly="*{description}"/></p>
+    <p>Genre<input type="text" th:field="*{genre}"  th:readonly="*{genre}"/></p>
+    <p>Average Rating <input type="text" th:field="*{avgRating}" th:readonly="*{avgRating}"/></p>
+    <p th:if="${#fields.hasErrors('avgRating')}" th:errors="*{avgRating}">Avg. Rating has to be less than 5!</p>
+    <p>Comments:
+        <ul th:each="cm: *{comments}">
+            <li th:text="${{cm.username}}"></li>
+            <li th:text="${{cm.message}}"></li>
+        </ul>
+    </p>
+    <p><input type="submit" value="Edit" /></p>
+    <ul>
+        <li th:each="e : ${#fields.detailedErrors()}" th:class="${e.global}? globalerr : fielderr">
+            <span th:text="${e.global}? '*' : ${e.fieldName}">The field name</span> |
+            <span th:text="${e.message}">The error message</span>
+        </li>
+    </ul>
+</form>
+</body>
+</html>

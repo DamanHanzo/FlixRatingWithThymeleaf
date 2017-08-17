@@ -1,12 +1,15 @@
 package com.kla.FlixRating.service;
 
+import com.kla.FlixRating.model.Comment;
 import com.kla.FlixRating.model.Flix;
+import com.kla.FlixRating.repository.CommentRepository;
 import com.kla.FlixRating.repository.FlixRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -15,6 +18,9 @@ public class FlixServiceImpl implements FlixService {
     @Autowired
     private FlixRepository flixRepository;
 
+
+    @Autowired
+    private CommentRepository commentRepository;
     public FlixRepository getFlixRepository() {
         return flixRepository;
     }
@@ -35,7 +41,14 @@ public class FlixServiceImpl implements FlixService {
     @Override
     @Transactional
     public List<Flix> listFlix(){
-        return this.flixRepository.findAll();
+        List<Flix> flixList = new ArrayList<Flix>();
+        flixList = this.flixRepository.findAll();
+        for(Flix flix: flixList){
+            List<Comment> comments = new ArrayList<Comment>();
+            comments = this.commentRepository.getCommentByFlix_Id(flix.getId());
+            flix.setComments(comments);
+        }
+        return flixList;
     }
 
     @Override
@@ -53,8 +66,14 @@ public class FlixServiceImpl implements FlixService {
 
     @Override
     @Transactional
-    public List<Flix> find(String name){
-        List<Flix> flixList = this.flixRepository.find(name);
+    public List<Flix> findByName(String name){
+        List<Flix> flixList = this.flixRepository.findByNameContaining(name);
         return flixList;
+    }
+
+    @Override
+    @Transactional
+    public void updateFlix(Flix f){
+        this.flixRepository.saveAndFlush(f);
     }
 }

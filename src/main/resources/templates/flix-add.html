@@ -10,7 +10,7 @@
     <p>Name: <input type="text" th:field="*{name}" /></p>
     <p>Description <input type="text" th:field="*{description}" /></p>
     <p>Genre<input type="text" th:field="*{genre}" /></p>
-    <p>Average Rating <input type="text" th:field="*{avgRating}" /></p>
+    <p>Average Rating <input type="text" th:field="*{avgRating}" th:readonly="${avgRating}"/></p>
     <p th:if="${#fields.hasErrors('avgRating')}" th:errors="*{avgRating}">Avg. Rating has to be less than 5!</p>
     <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
     <ul>

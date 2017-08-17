@@ -7,16 +7,18 @@ import javax.persistence.*;
 public class Comment {
     private int id;
     private String username;
-    private String comment;
+    private String message;
+
+//    @Column(name="flix_id")
+//    private Long flixId;
 
     private Flix flix;
 
     public Comment() {}
 
-    public Comment(String username, String comment){
-//        this.id = id;
+    public Comment(String username, String message){
         this.username = username;
-        this.comment = comment;
+        this.message = message;
     }
 
     @Id
@@ -29,12 +31,12 @@ public class Comment {
         this.id = id;
     }
 
-    public String getComment() {
-        return comment;
+    public String getMessage() {
+        return message;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public String getUsername() {
@@ -46,7 +48,7 @@ public class Comment {
     }
 
     @ManyToOne
-    @JoinColumn(name="flix_id")
+    @JoinColumn(name="flix_id", referencedColumnName = "id")
     public Flix getFlix() {
         return flix;
     }
@@ -54,4 +56,12 @@ public class Comment {
     public void setFlix(Flix flix) {
         this.flix = flix;
     }
+
+//    public long getFlixId() {
+//        return this.flixId = flix.getId();
+//    }
+//
+//    public void setFlixId(Long flixId) {
+//        this.flixId = flixId;
+//    }
 }

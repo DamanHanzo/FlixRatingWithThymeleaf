@@ -10,5 +10,6 @@ public interface FlixService {
     public List<Flix> listFlix();
     public Flix getFlixById(Long id);
     public void removeFlix(Long id);
-    public List<Flix> find(String name);
+    public List<Flix> findByName(String name);
+    public void updateFlix(Flix f);
 }
