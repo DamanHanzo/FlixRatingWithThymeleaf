@@ -2,6 +2,8 @@ package com.kla.FlixRating.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="flix")
@@ -9,7 +11,7 @@ public class Flix {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    private Long id;
 
     private String name;
     private String description;
@@ -17,6 +19,9 @@ public class Flix {
     @Max(5)
     private Float avgRating;
     private String genre;
+
+    @OneToMany(mappedBy = "flix", cascade = CascadeType.ALL)
+    private Set<Comment> comments;
 
     public Long getId() {
         return id;
@@ -61,5 +66,13 @@ public class Flix {
     @Override
     public  String toString(){
         return "id="+id+", name="+name+", description="+description+", avgRating="+avgRating;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }
