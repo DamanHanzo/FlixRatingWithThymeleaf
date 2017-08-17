@@ -2,7 +2,7 @@
 
 * Utilizing thymeleaf instead of AngularJS on the front-end
 
-+ OneToManyRelationship ![alt-text](https://openclipart.org/download/258557/Checkmark.svg)
++ OneToManyRelationship ![alt-text](https://media.giphy.com/media/8GY3UiUjwKwhO/source.gif)
 
 + General CRUD functionality ![alt-text](https://openclipart.org/download/258557/Checkmark.svg)
 
