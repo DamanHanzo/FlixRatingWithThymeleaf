@@ -4,6 +4,8 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="comments")
+//https://stackoverflow.com/questions/814474/jpa-not-saving-foreign-key-to-onetomany-relation
+//https://hellokoding.com/jpa-one-to-many-relationship-mapping-example-with-spring-boot-maven-and-mysql/
 public class Comment {
     private int id;
     private String username;
