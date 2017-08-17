@@ -22,8 +22,8 @@
             <th>Average Rating</th>
             <th>Edit Flix</th>
             <th>Remove Flix</th>
-            <th>Up Vote</th>
-            <th>Down Vote</th>
+            <!--<th>Up Vote</th>-->
+            <!--<th>Down Vote</th>-->
             <th>Comments</th>
         </tr>
         </thead>
@@ -35,8 +35,8 @@
             <td id="avgRating" th:text="${{fl.avgRating}}"></td>
             <td><a th:href="@{/flix/update/} + ${fl.id}">View</a> </td>
             <td><a th:href="@{/flix/remove/}+${fl.id}">Remove</a></td>
-            <td><a name="addRating" href="#" th:id="${{fl.id}}">Up</a></td>
-            <td><a name="subRating" href="#" th:id="${{fl.id}}">Down</a></td>
+            <!--<td><a name="addRating" href="#" th:id="${{fl.id}}">Up</a></td>-->
+            <!--<td><a name="subRating" href="#" th:id="${{fl.id}}">Down</a></td>-->
             <td>
                 <ul th:each="cm: *{fl.comments}">
                     <li th:text="${{cm.username}}"></li>
