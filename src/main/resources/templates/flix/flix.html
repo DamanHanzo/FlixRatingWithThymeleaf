@@ -23,12 +23,12 @@
             </tr>
             <tr th:each="flix,iterationStatus : ${listFlix}">
                 <td th:text="${flix.name}">Name</td>
-                <td th:text="${flix.description}">Description</td>
+                <td th:text="${#strings.abbreviate(flix.description,90)}">Description</td>
                 <td th:text="${flix.genre}">Genre</td>
-                <td th:text="${flix.avgRating}">Average Rating</td>
-                <td><a th:href="${ '/flix/update/' + flix.id}" class="btn btn-success btn-xs">View</a></td>
-                <td><a th:href="${'/flix/' + flix.id}" class="btn btn-warning btn-xs">Edit</a></td>
-                <td><a th:href="${'/flix/remove/' + flix.id}" class="btn btn-danger btn-xs">Delete</a></td>
+                <td th:text="${flix.avgRating}" class="avgRating">Average Rating</td>
+                <td><a th:href="${ '/flix/update/' + flix.id}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a></td>
+                <td><a th:href="${'/flix/' + flix.id}" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></td>
+                <td><a th:href="${'/flix/remove/' + flix.id}" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a></td>
             </tr>
         </table>
 
@@ -86,6 +86,23 @@
     </div>
 
 </div>
+<!--<script type="application/javascript">-->
+    <!--$.fn.stars = function() {-->
+        <!--return $(this).each(function() {-->
+            <!--// Get the value-->
+            <!--var val = parseFloat($(this).html());-->
+            <!--// Make sure that the value is in 0 - 5 range, multiply to get width-->
+            <!--var size = Math.max(0, (Math.min(5, val))) * 16;-->
+            <!--// Create stars holder-->
+            <!--var $span = $('<td/>').width(size);-->
+            <!--// Replace the numerical value with stars-->
+            <!--$(this).html($span);-->
+        <!--});-->
+    <!--}-->
 
+    <!--$(function () {-->
+       <!--$('td.avgRating').stars();-->
+    <!--});-->
+<!--</script>-->
 </body>
 </html>

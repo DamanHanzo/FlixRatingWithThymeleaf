@@ -6,3 +6,14 @@ nav.navbar ul.navbar-nav a:visited,
 nav.navbar ul.navbar-nav a:focus,
 nav.navbar ul.navbar-nav a:active { background: #080808; }
 nav.navbar ul.navbar-nav a:hover { border-color: #EE1C25; }
+
+td.avgRating, td.avgRating td {
+    display: block;
+    background: url('https://example.com/top.png') 0 -16px repeat-x;
+    width: 80px;
+    height: 16px;
+}
+
+td.avgRating td {
+    background-position: 0 0;
+}
