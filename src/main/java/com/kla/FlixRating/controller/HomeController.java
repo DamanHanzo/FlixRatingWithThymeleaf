@@ -29,13 +29,13 @@ public class HomeController {
     @RequestMapping("/")
     public String index(Model model){
         model.addAttribute("message", "Hello World!");
-        return "index";
+        return "redirect:/flixs";
     }
 
     @RequestMapping(value="/flix/add", method=RequestMethod.POST)
     public String createFlix(@Valid Flix flix, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
-            return "flix-add";
+            return "flix/flix-add";
         }
         flix.setRaters(1L);
         Float initRating = (flix.getAvgRating()/5);
@@ -47,7 +47,17 @@ public class HomeController {
     @RequestMapping(value="/flix", method= RequestMethod.GET)
     public String addFlix(Model model){
         model.addAttribute("flix", new Flix());
-        return "flix-add";
+        return "flix/flixform";
+    }
+
+    @RequestMapping(value="flix/search/{name}", method = RequestMethod.POST)
+    public String search( @RequestParam("name") String name, Model model, Pageable pageable){
+        if(name.length() > 0){
+            model.addAttribute("listFlix", this.flixService.findByName(name));
+
+            return "flix/flixsearch";
+        }
+        return  "redirect:/flixs";
     }
 
     @RequestMapping(value="/flixs", method= RequestMethod.GET)
@@ -56,19 +66,19 @@ public class HomeController {
         PageWrapper<Flix> page = new PageWrapper<Flix>(flixes, "/flixs");
         model.addAttribute("page", page);
         model.addAttribute("listFlix",page.getContent());
-        return "flix";
+        return "flix/flix";
     }
 
     @RequestMapping(value="/flix/update/{id}", method=RequestMethod.GET)
     public String loadViewPage(@PathVariable Long id, Model model){
         model.addAttribute("flix", this.flixService.getFlixById(id));
-        return "flix-view";
+        return "flix/flix-view";
     }
 
     @RequestMapping(value="flix/{id}", method = RequestMethod.GET)
     public String updateFlixGET(@PathVariable Long id, Model model){
         model.addAttribute("flix", this.flixService.getFlixById(id));
-        return "flix-update";
+        return "flix/flixform";
     }
 
     @RequestMapping(value="flix/{id}", method = RequestMethod.POST)
@@ -89,12 +99,7 @@ public class HomeController {
         return "redirect:/flixs";
     }
 
-    @RequestMapping(value="flix/search/{name}", method = RequestMethod.POST)
-    public String search( @RequestParam("name") String name, Model model){
-        List<Flix> flixList = this.flixService.findByName(name);
-        model.addAttribute("listFlix", flixList);
-        return "flix";
-    }
+
 
 //    @RequestMapping(value = "flix/addRating")
 //    public String upRating(@RequestParam("id") Long id){

@@ -69,7 +69,7 @@ public class FlixServiceImpl implements FlixService {
     @Override
     @Transactional
     public List<Flix> findByName(String name){
-        return this.flixRepository.findByNameContaining(name);
+        return this.flixRepository.findByNameStartsWith(name);
     }
 
     @Override

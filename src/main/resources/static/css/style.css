@@ -1,4 +1,8 @@
-.tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#fff;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:#ccc;color:#333;background-color:#f0f0f0;}
-.tg .tg-4eph{background-color:#f9f9f9}
+body { padding-top: 70px; }
+
+nav.navbar ul.navbar-nav a { color: #9d9d9d; border-style: solid; border-width: 0 0 2px 0; border-color: #222222; }
+nav.navbar ul.navbar-nav a:hover,
+nav.navbar ul.navbar-nav a:visited,
+nav.navbar ul.navbar-nav a:focus,
+nav.navbar ul.navbar-nav a:active { background: #080808; }
+nav.navbar ul.navbar-nav a:hover { border-color: #EE1C25; }
