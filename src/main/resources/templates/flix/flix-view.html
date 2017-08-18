@@ -4,15 +4,21 @@
 
     <title th:text="${#strings.capitalize(flix.name)}"></title>
 
+    <script scr="../static/js/jquery-3.2.1.min.js" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+
     <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
-
     <h2>Flix Details</h2>
-    <div>
-        <div class="form-horizontal">
+
+    <div class="row" style="padding-left: 30px; ">
+        <div>
+            <div class="btn-group" role="group" aria-label="flixButtons" style="margin-left: 40%">
+                <button type="button" id="addComment" class="btn btn-primary btn-lg">Rate and Comment</button>
+                <!--<button type="button" id="addRating" class="btn btn-secondary btn-lg">Rate</button>-->
+            </div>
             <div class="form-group">
                 <label class="col-sm-2 control-label">Name:</label>
                 <div class="col-sm-10">
@@ -38,36 +44,87 @@
                 </div>
             </div>
         </div>
+        <!--<form class="form-horizontal rate-form" method="post">-->
+            <!--<div class="form-group">-->
+                <!--<label class="col-sm-2 control-label">Your Rating: (out of 5)</label>-->
+                <!--<div class="col-sm-10">-->
+                    <!--<input type="text" required="true" style="max-width: 100px;" class="form-control" th:maxlength="1"/>-->
+                    <!--<button type="submit" class="btn btn-success" style="margin-top: 10px;">Save</button>-->
+                <!--</div>-->
+
+            <!--</div>-->
+
+        <!--</form>-->
         <hr/>
         <div th:if="${not #lists.isEmpty(flix.comments)}">
             <h4>Comments</h4>
-            <div class="divider" style="margin-top:10px;"></div>
             <div th:each="cm: ${flix.comments}">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Username:</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static" th:text="${{cm.username}}"></p>
+                <div class="comment-group">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Username:</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static" th:text="${{cm.username}}"></p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Message:</label>
+                        <div class="col-sm-10">
+                            <p class="form-control-static" th:text="${{cm.message}}"></p>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">Message:</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static" th:text="${{cm.message}}"></p>
-                    </div>
-                </div>
-
             </div>
-            <hr />
-        </div>
-        <!--<p>Comments:-->
-        <!--<ul th:each="cm: *{flix.comments}">-->
-            <!--<li th:text="${{cm.username}}"></li>-->
-            <!--<li th:text="${{cm.message}}"></li>-->
-        <!--</ul>-->
-        <!--</p>-->
 
+        </div>
+    </div>
+
+    <div id="commentForm">
+        <h4>Add a comment</h4>
+        <form class="form-horizontal" th:object="${comment}" th:action="@{/flix/comment/__${flix.id}__}"  method="post">
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+            </div>
+            <!--<input type="hidden" th:field="${flix.id}"/>-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Username:</label>
+                <div class="col-sm-10">
+                    <input type="text" required="true" class="form-control" th:field="*{username}" th:maxlength="255"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Message</label>
+                <div class="col-sm-10">
+                    <textarea type="text" required="true" class="form-control" th:field="*{message}" th:maxlength="1024" th:rows="5" th:cols="10"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Your Rating:(max 5)</label>
+                <div class="col-sm-10">
+                    <input type="text" required="true" class="form-control" th:field="*{rating}" th:maxlength="1"/>
+                </div>
+            </div>
+            <div class="row" style="margin-left: 17%;">
+                <button type="submit" class="btn btn-success">Save</button>
+            </div>
+        </form>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function () {
+       $("div#commentForm").hide();
+//       $("form.rate-form").hide();
+       $("button#addComment").click(function () {
+          $("div#commentForm").toggle('slow');
+           $('html, body').animate({
+               scrollTop: $("div#commentForm").offset().top
+           }, 2000);
+       });
+//        $("button#addRating").click(function () {
+//           $("form.rate-form").toggle('slow');
+//        });
+
+    });
+</script>
 
 </body>
 </html>

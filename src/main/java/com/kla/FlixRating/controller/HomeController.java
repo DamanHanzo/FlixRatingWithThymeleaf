@@ -1,5 +1,6 @@
 package com.kla.FlixRating.controller;
 
+import com.kla.FlixRating.model.Comment;
 import com.kla.FlixRating.model.Flix;
 import com.kla.FlixRating.model.PageWrapper;
 import com.kla.FlixRating.repository.CommentRepository;
@@ -38,8 +39,6 @@ public class HomeController {
             return "flix/flix-add";
         }
         flix.setRaters(1L);
-        Float initRating = (flix.getAvgRating()/5);
-        flix.setAvgRating(initRating);
         this.flixService.addFlix(flix);
         return "redirect:/flixs";
     }
@@ -47,7 +46,7 @@ public class HomeController {
     @RequestMapping(value="/flix", method= RequestMethod.GET)
     public String addFlix(Model model){
         model.addAttribute("flix", new Flix());
-        return "flix/flixform";
+        return "flix/flix-add";
     }
 
     @RequestMapping(value="flix/search/{name}", method = RequestMethod.POST)
@@ -55,7 +54,7 @@ public class HomeController {
         if(name.length() > 0){
             model.addAttribute("listFlix", this.flixService.findByName(name));
 
-            return "flix/flixsearch";
+            return "flix/flix-search";
         }
         return  "redirect:/flixs";
     }
@@ -71,25 +70,21 @@ public class HomeController {
 
     @RequestMapping(value="/flix/update/{id}", method=RequestMethod.GET)
     public String loadViewPage(@PathVariable Long id, Model model){
-        model.addAttribute("flix", this.flixService.getFlixById(id));
+        Flix existingFlix = this.flixService.getFlixById(id);
+        model.addAttribute("flix", existingFlix);
+        model.addAttribute("comment", new Comment());
         return "flix/flix-view";
     }
 
     @RequestMapping(value="flix/{id}", method = RequestMethod.GET)
     public String updateFlixGET(@PathVariable Long id, Model model){
         model.addAttribute("flix", this.flixService.getFlixById(id));
-        return "flix/flixform";
+        return "flix/flix-update";
     }
 
     @RequestMapping(value="flix/{id}", method = RequestMethod.POST)
     public String updateFlixPOST(@PathVariable Long id, Flix flix){
-        Float newRating = flix.getAvgRating();
-        Flix existingFlix = this.flixService.getFlixById(id);
-        Long raters = existingFlix.getRaters();
-        raters += 1L;
-        Float finalRating = (((newRating/5)+(existingFlix.getAvgRating()))/(float)raters);
-        flix.setAvgRating(finalRating);
-        this.flixService.updateFlix(id, flix);
+       this.flixService.updateFlix(id, flix);
         return "redirect:/flixs";
     }
 
@@ -99,33 +94,27 @@ public class HomeController {
         return "redirect:/flixs";
     }
 
+    @RequestMapping(value="flix/comment/{id}", method = RequestMethod.POST)
+    public String addComment(@PathVariable Long id, Comment comment, Model model){
+        Flix existingFlix = this.flixService.getFlixById(id);
+        Long raters = existingFlix.getRaters();
+        raters += 1;
+        existingFlix.setRaters(raters);
+        Comment newComment = new Comment(comment.getUsername(), comment.getMessage(), comment.getRating());
+        newComment.setFlix(existingFlix);
+        this.commentRepository.save(newComment);
+        List<Comment> comments = existingFlix.getComments();
+        Long ratingSum = 0L;
+        for(Comment comment1: comments){
+            Long rating = comment.getRating();
+            ratingSum += rating;
+        }
+        float newAvgRating = ratingSum/raters;
+        existingFlix.setAvgRating(newAvgRating);
+        this.flixService.updateFlix(id, existingFlix);
+        model.addAttribute("flix", existingFlix);
+        model.addAttribute("comment",new Comment());
+        return "flix/flix-view";
+    }
 
-
-//    @RequestMapping(value = "flix/addRating")
-//    public String upRating(@RequestParam("id") Long id){
-//        Flix existingFlix = this.flixService.getFlixById(id);
-//        Flix flix = new Flix();
-//        Long rater = existingFlix.getRaters() == null ? 1L : existingFlix.getRaters()+1L;
-//        Float avgRating = existingFlix.getAvgRating();
-//        avgRating = ((avgRating)/rater);
-//        existingFlix.setRaters(rater);
-//        existingFlix.setAvgRating(avgRating);
-//        BeanUtils.copyProperties(existingFlix, flix);
-//        this.flixService.updateFlix(flix);
-//        return "redirect";
-//    }
-//
-//    @RequestMapping(value = "flix/subRating/{id}")
-//    public String downRating(@PathVariable Long id){
-//        Flix existingFlix = this.flixService.getFlixById(id);
-//        Flix flix = new Flix();
-//        Long rater = existingFlix.getRaters() == null ? 1L : existingFlix.getRaters()+1L;
-//        Float avgRating = existingFlix.getAvgRating();
-//        avgRating = ((avgRating-10F)/rater);
-//        existingFlix.setRaters(rater);
-//        existingFlix.setAvgRating(avgRating);
-//        BeanUtils.copyProperties(existingFlix, flix);
-//        this.flixService.updateFlix(flix);
-//        return "redirect:/flixs";
-//    }
 }

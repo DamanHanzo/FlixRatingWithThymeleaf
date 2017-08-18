@@ -1,17 +1,62 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Add Flix</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<head lang="en">
+
+    <title>Edit Flix</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
 </head>
 <body>
-<h1>Form</h1>
-<form action="#" th:action="@{/flix/}+${id}" th:object="${flix}" method="post">
-    <p>Name: <input type="text" th:field="*{name}" /></p>
-    <p>Description <input type="text" th:field="*{description}" /></p>
-    <p>Genre<input type="text" th:field="*{genre}" /></p>
-    <p>Your Rating:(out of 5) <input type="text" th:field="*{avgRating}" /></p>
-    <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p>
-</form>
+
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+    <h2>Flix Details</h2>
+
+    <div>
+        <form class="form-horizontal" th:object="${flix}" th:action="@{/flix/__${id}__}" method="post">
+            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+            </div>
+            <!--<input type="hidden" th:field="*{id}"/>-->
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Name:</label>
+                <div class="col-sm-10">
+                    <input type="text" required="true" class="form-control" th:field="*{name}" th:maxlength="255"/>
+                    <p th:if="${#fields.hasErrors('name')}" class="label label-danger" th:errors="*{name}">Invalid Name</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Description</label>
+                <div class="col-sm-10">
+                    <textarea type="text" required="true" class="form-control" th:field="*{description}" th:maxlength="1024" th:rows="5" th:cols="10"></textarea>
+                    <p th:if="${#fields.hasErrors('name')}" class="label label-danger" th:errors="*{description}">Invalid Description</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Genre:</label>
+                <div class="col-sm-10">
+                    <input type="text" required="true" class="form-control" th:field="*{genre}" th:maxlength="255"/>
+                    <p th:if="${#fields.hasErrors('genre')}" class="label label-danger" th:errors="*{genre}">Invalid Genre</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">Rating(out of 5):</label>
+                <div class="col-sm-10">
+                    <input type="text" required="true" class="form-control" th:field="*{avgRating}" th:maxlength="1"/>
+                    <p th:if="${#fields.hasErrors('avgRating')}" class="label label-danger" th:errors="*{avgRating}">Invalid Rating</p>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-success" style="margin-left: 21%;">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
 </body>
 </html>

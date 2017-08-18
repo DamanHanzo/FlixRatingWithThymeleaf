@@ -7,29 +7,30 @@ import javax.persistence.*;
 //https://stackoverflow.com/questions/814474/jpa-not-saving-foreign-key-to-onetomany-relation
 //https://hellokoding.com/jpa-one-to-many-relationship-mapping-example-with-spring-boot-maven-and-mysql/
 public class Comment {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String username;
     private String message;
+    private Long rating;
 
-//    @Column(name="flix_id")
-//    private Long flixId;
-
+    @ManyToOne
+    @JoinColumn(name="flix_id", referencedColumnName = "id")
     private Flix flix;
 
     public Comment() {}
 
-    public Comment(String username, String message){
+    public Comment(String username, String message, Long rating){
         this.username = username;
         this.message = message;
+        this.rating = rating;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -49,8 +50,6 @@ public class Comment {
         this.username = username;
     }
 
-    @ManyToOne
-    @JoinColumn(name="flix_id", referencedColumnName = "id")
     public Flix getFlix() {
         return flix;
     }
@@ -59,11 +58,11 @@ public class Comment {
         this.flix = flix;
     }
 
-//    public long getFlixId() {
-//        return this.flixId = flix.getId();
-//    }
-//
-//    public void setFlixId(Long flixId) {
-//        this.flixId = flixId;
-//    }
+    public Long getRating() {
+        return rating;
+    }
+
+    public void setRating(Long rating) {
+        this.rating = rating;
+    }
 }

@@ -38,6 +38,7 @@ public class FlixServiceImpl implements FlixService {
     public void updateFlix(Long id, Flix flix){
         Flix existingFlix = this.flixRepository.findOne(id);
         BeanUtils.copyProperties(flix, existingFlix);
+        this.flixRepository.saveAndFlush(existingFlix);
     }
 
     @Override
@@ -74,13 +75,8 @@ public class FlixServiceImpl implements FlixService {
 
     @Override
     @Transactional
-    public void updateFlix(Flix f){
-        this.flixRepository.save(f);
-    }
-
-    @Override
-    @Transactional
     public Page<Flix> listAllByPages(Pageable pageable){
         return this.flixRepository.findAll(pageable);
+
     }
 }

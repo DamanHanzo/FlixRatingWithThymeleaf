@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name="flix")
@@ -16,7 +15,7 @@ public class Flix {
     private String name;
     private String description;
     @Column(name="avgrating")
-    @Max(value = 5, message = "Cannot be more than 5")
+    @Max(value = 5, message = "Rating: Cannot be more than 5")
     private Float avgRating;
     private String genre;
     private Long raters;

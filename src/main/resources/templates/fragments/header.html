@@ -21,7 +21,7 @@
                     <li><a href="#" th:href="@{/flix}">Add Flix</a></li>
                 </ul>
             </div>
-            <div class="col-sm-3 col-md-3">
+            <div class="col-sm-3 col-md-3 search-bar">
                 <form class="navbar-form" action="#" th:action="@{/flix/search/__${name}__}" method="post">
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search" name="name" id="name" />
@@ -45,7 +45,11 @@
              <img src="../../static/images/boot.png" width="200" th:src="@{/images/boot.png}"/>
          </div>
      </div>-->
+
+    <script src="../static/js/utils.js" th:src="@{/js/utils.js}"></script>
+    <script src="../static/js/tether.js" th:src="@{/js/tether.js}"></script>
     <script scr="../static/js/jquery-3.2.1.min.js" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script src="../static/js/bootstrap.js" th:src="@{/js/bootstrap.js}"></script>
 </div>
 
 <div class="container">
