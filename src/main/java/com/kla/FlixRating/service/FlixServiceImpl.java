@@ -2,15 +2,19 @@ package com.kla.FlixRating.service;
 
 import com.kla.FlixRating.model.Comment;
 import com.kla.FlixRating.model.Flix;
+import com.kla.FlixRating.model.FlixAPI;
 import com.kla.FlixRating.repository.CommentRepository;
 import com.kla.FlixRating.repository.FlixRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import javax.transaction.Transactional;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +24,13 @@ public class FlixServiceImpl implements FlixService {
     @Autowired
     private FlixRepository flixRepository;
 
+    private RestTemplate restTemplate;
+
+//    private URI uri;
 
     @Autowired
     private CommentRepository commentRepository;
+
     public FlixRepository getFlixRepository() {
         return flixRepository;
     }
@@ -77,6 +85,19 @@ public class FlixServiceImpl implements FlixService {
     @Transactional
     public Page<Flix> listAllByPages(Pageable pageable){
         return this.flixRepository.findAll(pageable);
+    }
 
+    @Override
+    @Transactional
+    public FlixAPI searchAPI(String q, RestTemplateBuilder restTemplateBuilder){
+        String tvMazeEP = "http://api.tvmaze.com/singlesearch/shows?q="+q;
+        this.restTemplate = restTemplateBuilder.build();
+        return this.restTemplate.getForObject(tvMazeEP, FlixAPI.class);
+    }
+
+    @Override
+    @Transactional
+    public Page<Flix> listAllByAvgRating(Pageable pageable){
+        return this.flixRepository.findAllByAvgRating(pageable);
     }
 }

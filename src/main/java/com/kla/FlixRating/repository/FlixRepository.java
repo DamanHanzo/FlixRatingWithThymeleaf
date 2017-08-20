@@ -11,4 +11,5 @@ public interface FlixRepository extends JpaRepository<Flix, Long> {
     List<Flix> findByNameStartsWith(String name);
     Flix getById(Long id);
     Page<Flix> findAll(Pageable pageable);
+    Page<Flix> findAllByAvgRating(Pageable pageable);
 }

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title>Flix Rating</title>
+
+    <!--/*/ <th:block th:include="fragments/headerinc :: head"></th:block> /*/-->
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <div th:if="${not #lists.isEmpty(listFlix)}">
+        <h2>Search Result</h2>
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Genre</th>
+                <th>Average Rating</th>
+                <th>View</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            <tr th:each="flix,iterationStatus : ${listFlix}">
+                <td th:text="${flix.name}">Name</td>
+                <td th:text="${flix.description}">Description</td>
+                <td th:text="${flix.genre}">Genre</td>
+                <td th:text="${flix.avgRating}">Average Rating</td>
+                <td><a th:href="${ '/flix/update/' + flix.id}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a></td>
+                <td><a th:href="${'/flix/' + flix.id}" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></td>
+                <td><a th:href="${'/flix/remove/' + flix.id}" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a></td>
+            </tr>
+        </table>
+    </div>
+    <div th:if="${#lists.isEmpty(listFlix)}">
+        <h2>No Results found in the DB</h2>
+        <div th:if="${not #lists.isEmpty(searchList)}">
+            <h4>You can load the following from an API:</h4>
+            <table class="table table-striped" th:if="${not #lists.isEmpty(searchList)}">
+                <tr>
+                    <th>Name</th>
+                    <th>URL</th>
+                    <th>Genres</th>
+                </tr>
+                <tr>
+                    <td th:text="${searchList.name}">Name</td>
+                    <td><a th:href="${searchList.url}">Show Link</a></td>
+                    <td>
+                        <ul th:each="gn: ${searchList.genres}">
+                            <li th:text="${gn}">Genre</li>
+                        </ul>
+                    </td>
+                    <!--<td th:text="${flix.avgRating}">Average Rating</td>-->
+                    <!--<td><a th:href="${ '/flix/update/' + flix.id}" class="btn btn-success btn-xs">View</a></td>-->
+                    <!--<td><a th:href="${'/flix/' + flix.id}" class="btn btn-warning btn-xs">Edit</a></td>-->
+                    <!--<td><a th:href="${'/flix/remove/' + flix.id}" class="btn btn-danger btn-xs">Delete</a></td>-->
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <!--<div class="row">-->
+    <!--<div class="col-sm-5">-->
+    <!--<div class="pagination"><p>Showing <span class="badge"-->
+    <!--th:text="${page.size * (page.number-1) + 1}"></span> to-->
+    <!--<span class="badge" th:text="${page.lastPage ? page.totalElements : page.size * (page.number-1)+ page.size}"></span> of-->
+    <!--<span class="badge"-->
+    <!--th:text="${page.totalElements}"></span>-->
+    <!--flixes</p></div>-->
+    <!--</div>-->
+
+    <!--<div class="col-sm-7">-->
+    <!--&lt;!&ndash; Pagination Bar &ndash;&gt;-->
+    <!--<div th:fragment='paginationbar'>-->
+    <!--<div class="text-center">-->
+    <!--<ul class='pagination pagination-centered'>-->
+    <!--<li th:class="${page.firstPage}?'disabled':''">-->
+    <!--<span th:if='${page.firstPage}'>← First</span>-->
+    <!--<a th:if='${not page.firstPage}' th:href='@{${page.url}(page=0,size=${page.size})}'>←-->
+    <!--First</a>-->
+    <!--</li>-->
+    <!--<li th:class="${page.hasPreviousPage}? '' : 'disabled'">-->
+    <!--<span th:if='${not page.hasPreviousPage}'>«</span>-->
+    <!--<a th:if='${page.hasPreviousPage}'-->
+    <!--th:href='@{${page.url}(page=${page.number-2},size=${page.size})}'-->
+    <!--title='Go to previous page'>«</a>-->
+    <!--</li>-->
+    <!--<li th:each='item : ${page.items}' th:class="${item.current}? 'active' : ''">-->
+    <!--<span th:if='${item.current}' th:text='${item.number}'>1</span>-->
+    <!--<a th:if='${not item.current}'-->
+    <!--th:href='@{${page.url}(page=${item.number-1},size=${page.size})}'><span-->
+    <!--th:text='${item.number}'>1</span></a>-->
+    <!--</li>-->
+    <!--<li th:class="${page.hasNextPage}? '' : 'disabled'">-->
+    <!--<span th:if='${not page.hasNextPage}'>»</span>-->
+    <!--<a th:if='${page.hasNextPage}'-->
+    <!--th:href='@{${page.url}(page=${page.number},size=${page.size})}'-->
+    <!--title='Go to next page'>»</a>-->
+    <!--</li>-->
+    <!--<li th:class="${page.lastPage}? 'disabled' : ''">-->
+    <!--<span th:if='${page.lastPage}'>Last →</span>-->
+    <!--<a th:if='${not page.lastPage}'-->
+    <!--th:href='@{${page.url}(page=${page.totalPages - 1},size=${page.size})}'>Last →</a>-->
+    <!--</li>-->
+    <!--</ul>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+
+    <!--</div>-->
+
+</div>
+
+</body>
+</html>

@@ -2,20 +2,27 @@ package com.kla.FlixRating.controller;
 
 import com.kla.FlixRating.model.Comment;
 import com.kla.FlixRating.model.Flix;
+import com.kla.FlixRating.model.FlixAPI;
 import com.kla.FlixRating.model.PageWrapper;
 import com.kla.FlixRating.repository.CommentRepository;
 import com.kla.FlixRating.service.FlixService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -27,6 +34,8 @@ public class HomeController {
     @Autowired
     private CommentRepository commentRepository;
 
+    @Autowired
+    private RestTemplateBuilder restTemplateBuilder;
     @RequestMapping("/")
     public String index(Model model){
         model.addAttribute("message", "Hello World!");
@@ -48,19 +57,19 @@ public class HomeController {
         model.addAttribute("flix", new Flix());
         return "flix/flix-add";
     }
-
-    @RequestMapping(value="flix/search/{name}", method = RequestMethod.POST)
-    public String search( @RequestParam("name") String name, Model model, Pageable pageable){
-        if(name.length() > 0){
-            model.addAttribute("listFlix", this.flixService.findByName(name));
-
-            return "flix/flix-search";
-        }
-        return  "redirect:/flixs";
-    }
+//
+//    @RequestMapping(value="flix/search/{name}", method = RequestMethod.GET)
+//    public String search( @RequestParam("name") String name, Model model, Pageable pageable){
+//        if(name.length() > 0){
+//            model.addAttribute("listFlix", this.flixService.findByName(name));
+//
+//            return "flix/flix-search";
+//        }
+//        return  "redirect:/flixs";
+//    }
 
     @RequestMapping(value="/flixs", method= RequestMethod.GET)
-    public String listFlix(Model model, Pageable pageable){
+    public String listFlix(Model model,@PageableDefault(sort="avgRating", direction = Sort.Direction.DESC) Pageable pageable){
         Page<Flix> flixes = this.flixService.listAllByPages(pageable);
         PageWrapper<Flix> page = new PageWrapper<Flix>(flixes, "/flixs");
         model.addAttribute("page", page);
@@ -98,23 +107,32 @@ public class HomeController {
     public String addComment(@PathVariable Long id, Comment comment, Model model){
         Flix existingFlix = this.flixService.getFlixById(id);
         Long raters = existingFlix.getRaters();
-        raters += 1;
+        raters += 1L;
         existingFlix.setRaters(raters);
         Comment newComment = new Comment(comment.getUsername(), comment.getMessage(), comment.getRating());
         newComment.setFlix(existingFlix);
         this.commentRepository.save(newComment);
         List<Comment> comments = existingFlix.getComments();
-        Long ratingSum = 0L;
+        Float ratingSum = 0F;
         for(Comment comment1: comments){
-            Long rating = comment.getRating();
+            Float rating = comment.getRating();
             ratingSum += rating;
         }
-        float newAvgRating = ratingSum/raters;
+        Float newAvgRating = (ratingSum/raters);
         existingFlix.setAvgRating(newAvgRating);
         this.flixService.updateFlix(id, existingFlix);
         model.addAttribute("flix", existingFlix);
         model.addAttribute("comment",new Comment());
         return "flix/flix-view";
+    }
+
+//    @RequestMapping(value = "flix/searchAPI/{q}", method = RequestMethod.GET)
+    @RequestMapping(value="flix/search", method = RequestMethod.GET)
+    public String searchAPI(@RequestParam("name") String name, Model model){
+       FlixAPI flixAPI = this.flixService.searchAPI(name,restTemplateBuilder);
+       model.addAttribute("listFlix", this.flixService.findByName(name));
+       model.addAttribute("searchList", flixAPI);
+       return "flix/flix-searchAPI";
     }
 
 }

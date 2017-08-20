@@ -12,7 +12,7 @@ public class Comment {
     private Long id;
     private String username;
     private String message;
-    private Long rating;
+    private Float rating;
 
     @ManyToOne
     @JoinColumn(name="flix_id", referencedColumnName = "id")
@@ -20,7 +20,7 @@ public class Comment {
 
     public Comment() {}
 
-    public Comment(String username, String message, Long rating){
+    public Comment(String username, String message, Float rating){
         this.username = username;
         this.message = message;
         this.rating = rating;
@@ -58,11 +58,11 @@ public class Comment {
         this.flix = flix;
     }
 
-    public Long getRating() {
+    public Float getRating() {
         return rating;
     }
 
-    public void setRating(Long rating) {
+    public void setRating(Float rating) {
         this.rating = rating;
     }
 }

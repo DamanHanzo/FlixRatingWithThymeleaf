@@ -25,7 +25,7 @@
                 <td th:text="${flix.name}">Name</td>
                 <td th:text="${#strings.abbreviate(flix.description,90)}">Description</td>
                 <td th:text="${flix.genre}">Genre</td>
-                <td th:text="${flix.avgRating}" class="avgRating">Average Rating</td>
+                <td th:text="${#numbers.formatDecimal(flix.avgRating,0,2)}" class="avgRating">Average Rating</td>
                 <td><a th:href="${ '/flix/update/' + flix.id}" class="btn btn-success btn-xs"><i class="fa fa-eye fa-lg" aria-hidden="true"></i></a></td>
                 <td><a th:href="${'/flix/' + flix.id}" class="btn btn-warning btn-xs"><i class="fa fa-pencil fa-lg" aria-hidden="true"></i></a></td>
                 <td><a th:href="${'/flix/remove/' + flix.id}" class="btn btn-danger btn-xs"><i class="fa fa-trash fa-lg" aria-hidden="true"></i></a></td>
