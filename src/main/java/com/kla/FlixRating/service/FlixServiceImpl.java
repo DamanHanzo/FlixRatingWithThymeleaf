@@ -38,6 +38,7 @@ public class FlixServiceImpl implements FlixService {
     @Override
     @Transactional
     public void addFlix(Flix f){
+        f.setName(f.getName().toLowerCase());
         this.flixRepository.save(f);
     }
 
