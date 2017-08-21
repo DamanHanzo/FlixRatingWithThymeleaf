@@ -10,7 +10,7 @@
 <div class="container">
     <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
     <div th:if="${not #lists.isEmpty(listFlix)}">
-        <h2>Search Result</h2>
+        <h2>Search Result(s):</h2>
         <table class="table table-striped">
             <tr>
                 <th>Name</th>
@@ -33,22 +33,32 @@
         </table>
     </div>
     <div th:if="${#lists.isEmpty(listFlix)}">
-        <h2>No Results found in the DB</h2>
         <div th:if="${not #lists.isEmpty(searchList)}">
+            <form class="form-horizontal" th:object="${FlixAPI}" th:action="@{/flix/add/api}" method="post">
+            <h2>No Flix found in the DB.</h2>
             <h4>You can load the following from an API:</h4>
             <table class="table table-striped" th:if="${not #lists.isEmpty(searchList)}">
                 <tr>
                     <th>Name</th>
                     <th>URL</th>
                     <th>Genres</th>
+                    <th>Rating:</th>
+                    <th>Add</th>
                 </tr>
                 <tr>
-                    <td th:text="${searchList.name}">Name</td>
-                    <td><a th:href="${searchList.url}">Show Link</a></td>
+                    <td th:text="${searchList.name}">Name<input type="hidden" th:text="${searchList.name}" th:field="*{searchList.name}"/></td>
+                    <td><a th:href="${searchList.url}">Link</a></td>
                     <td>
+                        <!--<input type="hidden" th:text="${searchList.url}" th:field="*{url}"/>-->
                         <ul th:each="gn: ${searchList.genres}">
-                            <li th:text="${gn}">Genre</li>
+                            <li th:text="${gn}">Genre<input type="hidden" th:text="${gn}" th:field="*{genre}"/></li>
                         </ul>
+                    </td>
+                    <td><p th:each="rat: ${searchList.rating}">
+                        <b th:text="${rat.value}"></b>
+                    </p></td>
+                    <td>
+                        <button type="submit" class="btn btn-success" style="margin-left: 21%;">Save</button>
                     </td>
                     <!--<td th:text="${flix.avgRating}">Average Rating</td>-->
                     <!--<td><a th:href="${ '/flix/update/' + flix.id}" class="btn btn-success btn-xs">View</a></td>-->
@@ -56,6 +66,11 @@
                     <!--<td><a th:href="${'/flix/remove/' + flix.id}" class="btn btn-danger btn-xs">Delete</a></td>-->
                 </tr>
             </table>
+            </form>
+        </div>
+
+        <div th:unless="${not #lists.isEmpty(searchList)}">
+            <h2>No Results found in the DB or the API</h2>
         </div>
     </div>
 

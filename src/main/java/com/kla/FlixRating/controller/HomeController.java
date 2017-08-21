@@ -17,8 +17,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.jws.WebParam;
 import javax.validation.Valid;
 
 import java.util.Collections;
@@ -102,9 +104,19 @@ public class HomeController {
         this.flixService.removeFlix(id);
         return "redirect:/flixs";
     }
+//
+//    public String processCommentError(Long id, Model model, BindingResult bindingResult){
+//        Flix flix = this.flixService.getFlixById(id);
+//        model.addAttribute("flix", flix);
+//        model.addAttribute("comment", new Comment());
+//        return "flix/flix-view";
+//    }
 
     @RequestMapping(value="flix/comment/{id}", method = RequestMethod.POST)
-    public String addComment(@PathVariable Long id, Comment comment, Model model){
+    public String addComment(@PathVariable Long id, @Valid Comment comment, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+           return "flix/flix-view";
+        }
         Flix existingFlix = this.flixService.getFlixById(id);
         Long raters = existingFlix.getRaters();
         raters += 1L;
@@ -120,19 +132,37 @@ public class HomeController {
         }
         Float newAvgRating = (ratingSum/raters);
         existingFlix.setAvgRating(newAvgRating);
-        this.flixService.updateFlix(id, existingFlix);
-        model.addAttribute("flix", existingFlix);
-        model.addAttribute("comment",new Comment());
-        return "flix/flix-view";
+        this.flixService.updateFlix(existingFlix);
+//        model.addAttribute("flix", existingFlix);
+//        model.addAttribute("comment",new Comment());
+        return "redirect:/flix/update/"+existingFlix.getId();
     }
 
 //    @RequestMapping(value = "flix/searchAPI/{q}", method = RequestMethod.GET)
     @RequestMapping(value="flix/search", method = RequestMethod.GET)
     public String searchAPI(@RequestParam("name") String name, Model model){
-       FlixAPI flixAPI = this.flixService.searchAPI(name,restTemplateBuilder);
-       model.addAttribute("listFlix", this.flixService.findByName(name));
-       model.addAttribute("searchList", flixAPI);
-       return "flix/flix-searchAPI";
+        if(name.length() > 0){
+            try {
+                FlixAPI flixAPI = this.flixService.searchAPI(name,restTemplateBuilder);
+                model.addAttribute("searchList", flixAPI);
+            } catch (HttpClientErrorException exception){
+                model.addAttribute("searchList", "");
+            }
+//            if(flixAPI.getName() != null){
+//                model.addAttribute("searchList", flixAPI);
+//            } else{
+//                model.addAttribute("searchList", new FlixAPI());
+//            }
+            model.addAttribute("listFlix", this.flixService.findByName(name));
+            return "flix/flix-searchAPI";
+        }
+       return "redirect:/flixs";
+    }
+
+    @RequestMapping(value = "flix/add/api", method = RequestMethod.POST)
+    public String AddFromAPI(Model model){
+        Flix flix = new Flix();
+        return "redirect:/flixs";
     }
 
 }

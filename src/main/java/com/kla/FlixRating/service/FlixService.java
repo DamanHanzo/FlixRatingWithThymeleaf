@@ -17,5 +17,5 @@ public interface FlixService {
     List<Flix> findByName(String name);
     Page<Flix> listAllByPages(Pageable page);
     FlixAPI searchAPI(String q,RestTemplateBuilder restTemplateBuilder);
-    Page<Flix> listAllByAvgRating(Pageable pageable);
+    void updateFlix(Flix f);
 }

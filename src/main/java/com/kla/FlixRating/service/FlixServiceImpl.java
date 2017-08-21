@@ -44,9 +44,17 @@ public class FlixServiceImpl implements FlixService {
     @Override
     @Transactional
     public void updateFlix(Long id, Flix flix){
-        Flix existingFlix = this.flixRepository.findOne(id);
-        BeanUtils.copyProperties(flix, existingFlix);
-        this.flixRepository.saveAndFlush(existingFlix);
+        Flix existingFlix = this.flixRepository.getById(id);
+        flix.setAvgRating(existingFlix.getAvgRating());
+        flix.setComments(existingFlix.getComments());
+        flix.setRaters(existingFlix.getRaters());
+        this.flixRepository.saveAndFlush(flix);
+    }
+
+    @Override
+    @Transactional
+    public void updateFlix(Flix f){
+        this.flixRepository.saveAndFlush(f);
     }
 
     @Override
@@ -93,11 +101,5 @@ public class FlixServiceImpl implements FlixService {
         String tvMazeEP = "http://api.tvmaze.com/singlesearch/shows?q="+q;
         this.restTemplate = restTemplateBuilder.build();
         return this.restTemplate.getForObject(tvMazeEP, FlixAPI.class);
-    }
-
-    @Override
-    @Transactional
-    public Page<Flix> listAllByAvgRating(Pageable pageable){
-        return this.flixRepository.findAllByAvgRating(pageable);
     }
 }

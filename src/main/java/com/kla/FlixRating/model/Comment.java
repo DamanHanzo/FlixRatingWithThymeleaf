@@ -1,6 +1,7 @@
 package com.kla.FlixRating.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
 
 @Entity
 @Table(name="comments")
@@ -12,6 +13,7 @@ public class Comment {
     private Long id;
     private String username;
     private String message;
+    @Max(value = 5, message = "Rating has to be less 5")
     private Float rating;
 
     @ManyToOne

@@ -3,11 +3,13 @@ package com.kla.FlixRating.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
+import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class FlixAPI {
     private String url;
     private String name;
+    private Map<String, Float> rating;
     private List<String> genres;
 
     public FlixAPI() {}
@@ -34,5 +36,13 @@ public class FlixAPI {
 
     public void setGenres(List<String> genres) {
         this.genres = genres;
+    }
+
+    public Map<String, Float> getRating() {
+        return rating;
+    }
+
+    public void setRating(Map<String, Float> rating) {
+        this.rating = rating;
     }
 }
